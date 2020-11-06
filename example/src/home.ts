@@ -129,15 +129,19 @@ function validateWorkflow1Page1Mapping() {
       var msg = '';
       if( !isNumber(age1)) {
         msg = age1 + ' is not a number';
-      } 
+      } else if( Number(age1.toString()) < 18 ) {
+        msg = 'User is under 18'
+      } else {
+        msg = 'User is 18 or older'
+      }
       return {
         validationMsg: msg
       };
     },
     templates: [
       {
-        id: "content",
-        content: `dummy stuff {{validationMsg}}`
+        id: "addUserPage1Output",
+        content: `{{validationMsg}}`
       }
     ]
   }
