@@ -18,35 +18,18 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-light fixed-top bd-navbar">
     <h1 class="navbar-brand">
-      Sample Page: This is a page created by vscode-page.
+      Workflow and Validation example using vscode-page.
     </h1>
-    <ul class="navbar-nav ml-md-auto">
-      <li class="nav-item">
-        <a class="nav-link p-2" href="" target="_blank" rel="noopener" aria-label="GitHub">
-          <img src="shared/imgs/github.png" />
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link p-2" href="" target="_blank" rel="noopener" aria-label="GitHub">
-          <img src="shared/imgs/twitter.png" />
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link p-2" href="" target="_blank" rel="noopener" aria-label="GitHub">
-          <img src="shared/imgs/contact.png" />
-        </a>
-      </li>
-    </ul>
   </nav>
   <div class="container-fluid" style="margin-top:63px;">
     <div class="row  flex-xl-nowrap">
       <div class="col-md-3 col-xl-2 bd-sidebar no-padding">
         <div class="bd-search d-flex py-md-3 pb-md-3">
-          <button type="button" class="btn btn-secondary" id="settingBtn" onclick="loadRepositories()">
-            Setting
-          </button>
         </div>
-        <ul id="repos" class="py-md-3 sidebar-sticky"></ul>
+        <ul id="users" class="py-md-3 sidebar-sticky"></ul>
+        <button type="button" class="btn btn-secondary" id="addUserBtn" onclick="showAddUserPage1()">
+          Add User
+        </button>
       </div>
       <main class="col-md-9 col-xl-10 py-md-3 pl-md-4 pr-md-4 bd-content">
         <h2 id="title"></h2>
@@ -60,73 +43,31 @@
 
     const vscode = acquireVsCodeApi();
     init();
-    function validatefields() {
-      var name1 = document.getElementById("robtestname").value;
-      var age1 = document.getElementById("robtestage").value;
-      var country1 = document.getElementById("robtestcountry").value;
-      var aorb1 = document.getElementById("robtestaorb").value;
+    function validateAddUserPage1() {
+      var name1 = document.getElementById("addusername").value;
+      var age1 = document.getElementById("adduserage").value;
+      var country1 = document.getElementById("addusercountry").value;
       vscode.postMessage({
-        command: "workflow1ValidatePage1",
+        command: "validateAddUserPage1",
         parameters: {
           name: name1,
           age: age1,
-          country: country1,
-          aorb: aorb1
-        }
-      });
-    }
-    function listExtensions(repo) {
-      vscode.postMessage({
-        command: "listExtensions",
-        parameters: {
-          repo: repo
+          country: country1
         }
       });
     }
 
-    function showExtension(repo, extId, installed) {
+    function showAddUserPage1() {
       vscode.postMessage({
-        command: "showExtension",
-        parameters: {
-          repo: repo,
-          extId: extId,
-          installed: installed
-        }
+        command: "showAddUserPage1"
       });
     }
 
-    function installExtension(repo, extId) {
+    function showUser(userid) {
       vscode.postMessage({
-        command: "installExtension",
+        command: "showUser",
         parameters: {
-          repo: repo,
-          extId: extId
-        }
-      });
-    }
-
-    function loadRepositories() {
-      vscode.postMessage({
-        command: "loadRepositories"
-      });
-    }
-
-    function submitRepositories() {
-      if ($("#setting-textarea").val()) {
-        vscode.postMessage({
-          command: "submitRepositories",
-          parameters: {
-            repositories: JSON.parse($("#setting-textarea").val())
-          }
-        });
-      }
-    }
-
-    function openExtension(extId) {
-      vscode.postMessage({
-        command: "openExtension",
-        parameters: {
-          extId: extId
+          userid: userid
         }
       });
     }
