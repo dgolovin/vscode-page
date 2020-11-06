@@ -60,7 +60,21 @@
 
     const vscode = acquireVsCodeApi();
     init();
-
+    function validatefields() {
+      var name1 = document.getElementById("robtestname").value;
+      var age1 = document.getElementById("robtestage").value;
+      var country1 = document.getElementById("robtestcountry").value;
+      var aorb1 = document.getElementById("robtestaorb").value;
+      vscode.postMessage({
+        command: "workflow1ValidatePage1",
+        parameters: {
+          name: name1,
+          age: age1,
+          country: country1,
+          aorb: aorb1
+        }
+      });
+    }
     function listExtensions(repo) {
       vscode.postMessage({
         command: "listExtensions",

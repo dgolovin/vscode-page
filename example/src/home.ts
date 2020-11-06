@@ -82,40 +82,43 @@ function showExtension(extId: string, repo: string) {
   return {};
 }
 
-export const messageMappings: MesssageMaping[] = [
-  {
-    command: "ready",
-    handler: async () => {
-      let result = loadFromHome();
-      return {
-        repositories: result.repositories,
-        extensionInstalled: result.extensionInstalled,
-        title: "Installed Extensions"
-      };
-    },
-    templates: [
-      {
-        id: "repos",
-        content: `
-        {{#each repositories}}
-          <li>
-            <a class="bd-toc-link" onclick="listExtensions('{{name}}')" href="#">
-              <img src="shared/imgs/logo/{{type}}.png" class="repos_logo">{{name}}
-            </a>
-          </li>
-        {{/each}}
-        `
-      },
-      { id: "title", content: "{{title}}" },
-      {
-        id: "content",
-        contentUrl: "pages/list_intalled.hb"
-      }
-    ]
+function readyCommandMapping() {
+  return {
+  command: "ready",
+  handler: async () => {
+    let result = loadFromHome();
+    return {
+      repositories: result.repositories,
+      extensionInstalled: result.extensionInstalled,
+      title: "Installed Extensions"
+    };
   },
-  {
+  templates: [
+    {
+      id: "repos",
+      content: `
+      {{#each repositories}}
+        <li>
+          <a class="bd-toc-link" onclick="listExtensions('{{name}}')" href="#">
+            <img src="shared/imgs/logo/{{type}}.png" class="repos_logo">{{name}}
+          </a>
+        </li>
+      {{/each}}
+      `
+    },
+    { id: "title", content: "{{title}}" },
+    {
+      id: "content",
+      contentUrl: "pages/list_intalled.hb"
+    }
+  ]
+};
+}
+
+function listExtensionMapping() {
+  return {
     command: "listExtensions",
-    handler: async parameters => {
+    handler: async (parameters: any) => {
       let result = await listExtensions(parameters.repo);
       let installedExtIds = (await loadFromHome()).extensionInstalled.map(
         extension => extension.extId
@@ -140,10 +143,12 @@ export const messageMappings: MesssageMaping[] = [
         contentUrl: "pages/list_extension.hb"
       }
     ]
-  },
-  {
+  }
+}
+function showExtensionMapping() {
+  return {
     command: "showExtension",
-    handler: async parameters => {
+    handler: async (parameters: any) => {
       let result = await showExtension(parameters.extId, parameters.repo);
       let readMe = (await vscode.commands.executeCommand(
         "markdown.api.render",
@@ -169,12 +174,10 @@ export const messageMappings: MesssageMaping[] = [
         contentUrl: "pages/detail_extension.hb"
       }
     ]
-  },
-  {
-    command: "installExtension",
-    handler: async parameters => {}
-  },
-  {
+  }
+}
+function loadReposMapping() {
+  return {
     command: "loadRepositories",
     handler: async () => {
       let result = await loadFromHome();
@@ -211,7 +214,49 @@ export const messageMappings: MesssageMaping[] = [
         contentUrl: "pages/setting.hb"
       }
     ]
+  }
+}
+
+function isNumber(value: string | number): boolean
+{
+   return ((value != null) &&
+           (value !== '') &&
+           !isNaN(Number(value.toString())));
+}
+
+function validateWorkflow1Page1Mapping() {
+  return {
+    command: "workflow1ValidatePage1",
+    handler: async (parameters: any) => {
+      const name1 = parameters.name;
+      const age1 = parameters.age;
+      const country1 = parameters.country;
+      const aorb1 = parameters.aorb1;
+      var msg = '';
+      if( !isNumber(age1)) {
+        msg = age1 + ' is not a number';
+      }
+      return {
+        validationMsg: msg
+      };
+    },
+    templates: [
+      { id: "robtestoutput", content: "{{validationMsg}}" }
+    ]
+  }
+}
+
+
+export const messageMappings: MesssageMaping[] = [
+  validateWorkflow1Page1Mapping(),
+  readyCommandMapping(),
+  listExtensionMapping(),
+  showExtensionMapping(),
+  {
+    command: "installExtension",
+    handler: async parameters => {}
   },
+  loadReposMapping(),
   {
     command: "submitRepositories",
     handler: async parameters => {
