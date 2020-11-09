@@ -43,23 +43,62 @@
 
     const vscode = acquireVsCodeApi();
     init();
-    function validateAddUserPage1() {
-      var name1 = document.getElementById("addusername").value;
-      var age1 = document.getElementById("adduserage").value;
-      var country1 = document.getElementById("addusercountry").value;
-      vscode.postMessage({
-        command: "validateAddUserPage1",
-        parameters: {
-          name: name1,
-          age: age1,
-          country: country1
-        }
-      });
-    }
+    let wizardMap = new Map();
 
     function showAddUserPage1() {
       vscode.postMessage({
         command: "showAddUserPage1"
+      });
+    }
+
+    function validateAddUserPage1() {
+      var name1 = document.getElementById("addusername").value;
+      var age1 = document.getElementById("adduserage").value;
+      var country1 = document.getElementById("addusercountry").value;
+      wizardMap['name'] = name1;
+      wizardMap['age'] = age1;
+      wizardMap['country'] = country1;
+      vscode.postMessage({
+        command: "validateAddUserPage1",
+        parameters: wizardMap
+      });
+    }
+
+    function validateCreditCardNumber() {
+      var ccnum1 = document.getElementById("ccnumber").value;
+      wizardMap['ccnum'] = ccnum1;
+      vscode.postMessage({
+        command: "validateCreditCardNumber",
+        parameters: wizardMap
+      });
+    }
+    function validateFavoriteColor() {
+      var favcolor1 = document.getElementById("favcolor").value;
+      wizardMap['favcolor'] = favcolor1;
+      // do nothing
+    }
+    
+
+    function showAddUserPage2() {
+      var name1 = document.getElementById("addusername").value;
+      var age1 = document.getElementById("adduserage").value;
+      var country1 = document.getElementById("addusercountry").value;
+      wizardMap['name'] = name1;
+      wizardMap['age'] = age1;
+      wizardMap['country'] = country1;
+      
+      vscode.postMessage({
+        command: "showAddUserPage2",
+        parameters: wizardMap
+      });
+    }
+
+    function submitAddUser() {
+      var ccnum = document.getElementById("ccnumber").value;
+      var favcolor = document.getElementById("favcolor").value;
+      vscode.postMessage({
+        command: "submitAddUser",
+        parameters: wizardMap
       });
     }
 
