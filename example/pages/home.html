@@ -111,10 +111,18 @@
       });
     }
 
-    function init() {
+    function postCommandWithMap(cmdid) {
       vscode.postMessage({
-        command: "ready"
+        command: cmdid,
+        // this works
+        parameters: {}
+        // these do not
+        // parameters: wizardMap
+        // parameters: Object.fromEntries(wizardMap)
       });
+    }
+    function init() {
+      postCommandWithMap("ready");
     }
 
     function cancelSetting() {
