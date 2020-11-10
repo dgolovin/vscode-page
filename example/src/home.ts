@@ -91,7 +91,7 @@ function showUserMapping() {
       <li>Name: {{name}}</li>
       <li>Age: {{age}}</li>
       <li>CC: {{cc}}</li>
-      <li>Candy: {{candy}}</li>
+      <li>Color: {{color}}</li>
       `
     }
   ]
@@ -243,7 +243,9 @@ function submitAddUserMapping() {
           </li>
         {{/each}}
         `
-      }
+      },
+      {id: 'title', content: ' '},
+      {id: "content",content: ' '}
     ]
   };
   }
