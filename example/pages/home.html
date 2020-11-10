@@ -42,64 +42,57 @@
     initEventListener();
 
     const vscode = acquireVsCodeApi();
+    const wizardMap = new Map();
     init();
-    let wizardMap = new Map();
 
     function showAddUserPage1() {
-      vscode.postMessage({
-        command: "showAddUserPage1"
-      });
+      postCommandWithMap("showAddUserPage1");
     }
 
-    function validateAddUserPage1() {
+    function setPage1FieldsInMap() {
       var name1 = document.getElementById("addusername").value;
       var age1 = document.getElementById("adduserage").value;
       var country1 = document.getElementById("addusercountry").value;
-      wizardMap['name'] = name1;
-      wizardMap['age'] = age1;
-      wizardMap['country'] = country1;
-      vscode.postMessage({
-        command: "validateAddUserPage1",
-        parameters: wizardMap
-      });
+      wizardMap.set('name', name1);
+      wizardMap.set('age', age1);
+      wizardMap.set('country', country1);
+    }
+    function validateAddUserPage1() {
+      setPage1FieldsInMap();
+      console.log("validate add user page 1:  ");
+      console.log([...wizardMap.entries()]);
+      postCommandWithMap("validateAddUserPage1");
     }
 
     function validateCreditCardNumber() {
       var ccnum1 = document.getElementById("ccnumber").value;
-      wizardMap['ccnum'] = ccnum1;
-      vscode.postMessage({
-        command: "validateCreditCardNumber",
-        parameters: wizardMap
-      });
+      wizardMap.set('ccnum',ccnum1);
+
+      postCommandWithMap("validateCreditCardNumber");
     }
+
     function validateFavoriteColor() {
       var favcolor1 = document.getElementById("favcolor").value;
-      wizardMap['favcolor'] = favcolor1;
+      wizardMap.set('favcolor',favcolor1);
       // do nothing
     }
     
 
     function showAddUserPage2() {
-      var name1 = document.getElementById("addusername").value;
-      var age1 = document.getElementById("adduserage").value;
-      var country1 = document.getElementById("addusercountry").value;
-      wizardMap['name'] = name1;
-      wizardMap['age'] = age1;
-      wizardMap['country'] = country1;
-      
-      vscode.postMessage({
-        command: "showAddUserPage2",
-        parameters: wizardMap
-      });
+      setPage1FieldsInMap();
+      postCommandWithMap("showAddUserPage2");
     }
 
     function submitAddUser() {
-      var ccnum = document.getElementById("ccnumber").value;
-      var favcolor = document.getElementById("favcolor").value;
-      vscode.postMessage({
-        command: "submitAddUser",
-        parameters: wizardMap
-      });
+      console.log(document.getElementById("ccnumber"));
+      console.log( document.getElementById("favcolor"));
+      var ccnumElement = document.getElementById("ccnumber");
+      var favcolorElement = document.getElementById("favcolor");
+      var ccnum = (ccnumElement == null ? null : ccnumElement.value);
+      var favcolor = (favcolorElement == null ? null : favcolorElement.value);
+      wizardMap.set('ccnum', ccnum);
+      wizardMap.set('favcolor', favcolor);
+      postCommandWithMap("submitAddUser");
     }
 
     function showUser(userid) {
@@ -107,18 +100,16 @@
         command: "showUser",
         parameters: {
           userid: userid
-        }
+        } 
       });
     }
 
     function postCommandWithMap(cmdid) {
+      console.log("Post command with map: ");
+      console.log([...wizardMap.entries()]);
       vscode.postMessage({
         command: cmdid,
-        // this works
-        parameters: {}
-        // these do not
-        // parameters: wizardMap
-        // parameters: Object.fromEntries(wizardMap)
+        parameters: Object.fromEntries(wizardMap)
       });
     }
     function init() {

@@ -12,22 +12,25 @@ export declare type User = {
   id: string,
   name: string,
   age: number,
+  country: string,
   cc?: string,
-  candy?: string
+  color?: string
 };
 
 const ben: User = {
   id: 'ben',
   name: 'ben lastname',
+  country: 'greenland',
   age: 10,
-  candy: 'kit kat'
+  color: 'blue'
 }
 
 const susan: User = {
   id: 'susan',
   name: 'susan lastname',
+  country: 'usa',
   age: 43,
-  cc: '8675 3090 8675 3090'
+  cc: '8675309086753090'
 }
 
 let model: Map<String,User>;
@@ -214,6 +217,15 @@ function submitAddUserMapping() {
         const country1 = parameters.country;
         const ccnum1 = parameters.ccnum;
         const favcolor1 = parameters.favcolor;
+        const userToAdd: User = {
+            id: name1,
+            name: name1,
+            age: age1,
+            country: country1,
+            cc: ccnum1,
+            color: favcolor1,
+          };
+        addUser(userToAdd);
         let users = getUsers();
         return {
             users: users
